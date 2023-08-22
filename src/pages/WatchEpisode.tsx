@@ -55,7 +55,7 @@ export default function WatchEpisode() {
       <h2 className="text-sm xs:text-base sm:text-lg md:text-xl text-center">
         Playing{" "}
         {isAnimeLoading || (
-          <div>
+          <>
             <Link
               className="font-bold hover:underline focus:underline"
               to={`/${animeInfo.id}`}
@@ -63,7 +63,7 @@ export default function WatchEpisode() {
               {animeInfo.title}
             </Link>{" "}
             {animeInfo.totalEpisodes !== "1" && `Episode ${episodeNum}`}
-          </div>
+          </>
         )}
       </h2>
       <div className="flex justify-center">
