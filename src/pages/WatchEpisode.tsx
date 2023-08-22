@@ -28,7 +28,11 @@ export default function WatchEpisode() {
     queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
   });
 
-  const { data: animeInfo, isLoading: isAnimeLoading } = useQuery({
+  const {
+    data: animeInfo,
+    isLoading: isAnimeLoading,
+    isError: isAnimeError,
+  } = useQuery({
     queryKey: ["anime-details", newAnimeId],
     queryFn: () => getAnimeInfo(newAnimeId),
   });
@@ -43,7 +47,7 @@ export default function WatchEpisode() {
     <div>
       <Helmet>
         <title>
-          {isAnimeLoading
+          {isAnimeLoading || isAnimeError
             ? "Animetetsu"
             : `${animeInfo.title} Episode ${episodeNum} | Animetetsu`}
         </title>
@@ -51,7 +55,7 @@ export default function WatchEpisode() {
       <h2 className="text-sm xs:text-base sm:text-lg md:text-xl text-center">
         Playing{" "}
         {isAnimeLoading || (
-          <>
+          <div>
             <Link
               className="font-bold hover:underline focus:underline"
               to={`/${animeInfo.id}`}
@@ -59,7 +63,7 @@ export default function WatchEpisode() {
               {animeInfo.title}
             </Link>{" "}
             {animeInfo.totalEpisodes !== "1" && `Episode ${episodeNum}`}
-          </>
+          </div>
         )}
       </h2>
       <div className="flex justify-center">

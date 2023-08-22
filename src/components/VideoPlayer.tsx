@@ -17,7 +17,6 @@ export default function VideoPlayer({ src }: { src: string }) {
     } else if (Hls.isSupported()) {
       // This will run in all other modern browsers
       const hls = new Hls();
-      hls.loadSource("");
       hls.loadSource(src);
       new Plyr(video, {
         keyboard: { global: true },
@@ -41,12 +40,16 @@ export default function VideoPlayer({ src }: { src: string }) {
         ],
       });
       hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
     } else {
       console.error(
         "This is an old browser that does not support MSE https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API"
       );
     }
-  }, [src, videoRef]);
+  }, [videoRef]);
+
   setTimeout(() => {
     if (videoRef.current) {
       new Plyr(videoRef.current, {
@@ -74,6 +77,7 @@ export default function VideoPlayer({ src }: { src: string }) {
   return (
     <>
       <video
+        key={src}
         data-displaymaxtap
         className="aspect-video h-[180px] sm:h-[225px] md:h-[340px]"
         ref={videoRef}
