@@ -46,7 +46,7 @@ export default function VideoPlayer({ src }: { src: string }) {
         "This is an old browser that does not support MSE https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API"
       );
     }
-  }, [src, videoRef]);
+  }, [videoRef]);
   setTimeout(() => {
     if (videoRef.current) {
       new Plyr(videoRef.current, {
@@ -72,12 +72,11 @@ export default function VideoPlayer({ src }: { src: string }) {
   }, 500);
 
   return (
-    <>
-      <video
-        data-displaymaxtap
-        className="aspect-video h-[180px] sm:h-[225px] md:h-[340px]"
-        ref={videoRef}
-      />
-    </>
+    <video
+      key={src}
+      data-displaymaxtap
+      className="aspect-video h-[180px] sm:h-[225px] md:h-[340px]"
+      ref={videoRef}
+    />
   );
 }

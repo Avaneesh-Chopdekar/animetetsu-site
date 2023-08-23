@@ -1,7 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import VideoPlayer from "../components/VideoPlayer";
 import { useQuery } from "@tanstack/react-query";
-import { getAnimeInfo, getEpisodeData } from "../utils/api";
+import {
+  getAnimeInfo,
+  //  getEpisodeData,
+  getEpisodeDataBk,
+} from "../utils/api";
 import type { Episode } from "../utils/types";
 import { Helmet } from "react-helmet-async";
 
@@ -19,16 +23,25 @@ export default function WatchEpisode() {
       ? animeId.replace("xyz", "xy-z")
       : animeId;
 
-  const {
-    data: epUrl,
-    isLoading: isEpisodeLoading,
-    isError: isEpisodeError,
-  } = useQuery({
-    queryKey: ["episode", epId],
-    queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
+  // const {
+  //   data: epUrl,
+  //   isLoading: isEpisodeLoading,
+  //   isError: isEpisodeError,
+  // } = useQuery({
+  //   queryKey: ["episode", epId],
+  //   queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
+  // });
+
+  const { data: bk_epUrl, isLoading: isEpisodeLoadingBk } = useQuery({
+    queryKey: ["backup episode", epId],
+    queryFn: () => getEpisodeDataBk(epId!!.replace("ep", "episode")),
   });
 
-  const { data: animeInfo, isLoading: isAnimeLoading } = useQuery({
+  const {
+    data: animeInfo,
+    isLoading: isAnimeLoading,
+    isError: isAnimeError,
+  } = useQuery({
     queryKey: ["anime-details", newAnimeId],
     queryFn: () => getAnimeInfo(newAnimeId),
   });
@@ -43,7 +56,7 @@ export default function WatchEpisode() {
     <div>
       <Helmet>
         <title>
-          {isAnimeLoading
+          {isAnimeLoading || isAnimeError
             ? "Animetetsu"
             : `${animeInfo.title} Episode ${episodeNum} | Animetetsu`}
         </title>
@@ -51,7 +64,7 @@ export default function WatchEpisode() {
       <h2 className="text-sm xs:text-base sm:text-lg md:text-xl text-center">
         Playing{" "}
         {isAnimeLoading || (
-          <>
+          <span>
             <Link
               className="font-bold hover:underline focus:underline"
               to={`/${animeInfo.id}`}
@@ -59,7 +72,7 @@ export default function WatchEpisode() {
               {animeInfo.title}
             </Link>{" "}
             {animeInfo.totalEpisodes !== "1" && `Episode ${episodeNum}`}
-          </>
+          </span>
         )}
       </h2>
       <div className="flex justify-center">
@@ -71,11 +84,14 @@ export default function WatchEpisode() {
       scrolling="no"
     /> */}
         <div className="my-4 aspect-video h-[180px] sm:h-[225px] md:h-[340px]">
-          {isEpisodeLoading || isEpisodeError || (
-            <div>
+          {isEpisodeLoadingBk || (
+            <div key={bk_epUrl.sources[0].file}>
+              {/* <VideoPlayer
+                  src={epUrl.sources[epUrl.sources.length - 2].url}
+                /> */}
               <VideoPlayer
-                key="video-player"
-                src={epUrl.sources[epUrl.sources.length - 2].url}
+                key={bk_epUrl.sources[0].file}
+                src={bk_epUrl.sources[0].file}
               />
             </div>
           )}

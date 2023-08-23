@@ -29,3 +29,11 @@ export async function getEpisodeData(episodeId: string) {
   const epData = await res.json();
   return epData;
 }
+
+export async function getEpisodeDataBk(episodeId: string) {
+  const res = await fetch(
+    `${import.meta.env.VITE_APP_API_URL_BK}vidcdn/watch/${episodeId}`
+  );
+  const epData = await res.json();
+  return epData;
+}
