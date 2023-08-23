@@ -85,14 +85,11 @@ export default function WatchEpisode() {
     /> */}
         <div className="my-4 aspect-video h-[180px] sm:h-[225px] md:h-[340px]">
           {isEpisodeLoadingBk || (
-            <div key={bk_epUrl.sources[0].file}>
+            <div key={epId}>
               {/* <VideoPlayer
                   src={epUrl.sources[epUrl.sources.length - 2].url}
                 /> */}
-              <VideoPlayer
-                key={bk_epUrl.sources[0].file}
-                src={bk_epUrl.sources[0].file}
-              />
+              <VideoPlayer key={epId} src={bk_epUrl.sources[0].file} />
             </div>
           )}
         </div>
