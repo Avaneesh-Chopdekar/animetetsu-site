@@ -3,8 +3,8 @@ import VideoPlayer from "../components/VideoPlayer";
 import { useQuery } from "@tanstack/react-query";
 import {
   getAnimeInfo,
-  //  getEpisodeData,
-  getEpisodeDataBk,
+  getEpisodeData,
+  // getEpisodeDataBk,
 } from "../utils/api";
 import type { Episode } from "../utils/types";
 import { Helmet } from "react-helmet-async";
@@ -23,19 +23,19 @@ export default function WatchEpisode() {
       ? animeId.replace("xyz", "xy-z")
       : animeId;
 
-  // const {
-  //   data: epUrl,
-  //   isLoading: isEpisodeLoading,
-  //   isError: isEpisodeError,
-  // } = useQuery({
-  //   queryKey: ["episode", epId],
-  //   queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
-  // });
-
-  const { data: bk_epUrl, isLoading: isEpisodeLoadingBk } = useQuery({
-    queryKey: ["backup episode", epId],
-    queryFn: () => getEpisodeDataBk(epId!!.replace("ep", "episode")),
+  const {
+    data: epUrl,
+    isLoading: isEpisodeLoading,
+    isError: isEpisodeError,
+  } = useQuery({
+    queryKey: ["episode", epId],
+    queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
   });
+
+  // const { data: bk_epUrl, isLoading: isEpisodeLoadingBk } = useQuery({
+  //   queryKey: ["backup episode", epId],
+  //   queryFn: () => getEpisodeDataBk(epId!!.replace("ep", "episode")),
+  // });
 
   const {
     data: animeInfo,
@@ -84,12 +84,10 @@ export default function WatchEpisode() {
       scrolling="no"
     /> */}
         <div className="my-4 aspect-video h-[180px] sm:h-[225px] md:h-[340px]">
-          {isEpisodeLoadingBk || (
+          {isEpisodeLoading || isEpisodeError || (
             <div key={epId}>
-              {/* <VideoPlayer
-                  src={epUrl.sources[epUrl.sources.length - 2].url}
-                /> */}
-              <VideoPlayer key={epId} src={bk_epUrl.sources[0].file} />
+              <VideoPlayer src={epUrl.sources[epUrl.sources.length - 2].url} />
+              {/* <VideoPlayer key={epId} src={bk_epUrl.sources[0].file} /> */}
             </div>
           )}
         </div>
