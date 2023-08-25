@@ -67,7 +67,7 @@ export default function WatchEpisode() {
           <span>
             <Link
               className="font-bold hover:underline focus:underline"
-              to={`/${animeInfo.id}`}
+              to={`/${animeId}`}
             >
               {animeInfo.title}
             </Link>{" "}
