@@ -3,14 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import PacmanLoading from "../components/PacmanLoading";
 import type { Episode } from "../utils/types";
-import { getAnimeInfo } from "../utils/api";
+import { getAnimeInfoBk } from "../utils/api";
 
 export default function AnimeDetails() {
   const { animeId } = useParams();
 
   const { data: animeInfo, isLoading } = useQuery({
     queryKey: ["anime-details", animeId],
-    queryFn: () => getAnimeInfo(animeId!!),
+    queryFn: () => getAnimeInfoBk(animeId!!),
   });
 
   if (!isLoading && animeInfo.type !== "OVA" && animeInfo.type !== "ONA") {
@@ -23,7 +23,7 @@ export default function AnimeDetails() {
     <div className="mx-1 sm:mx-4 lg:mx-6">
       <Helmet>
         <title>
-          {isLoading ? "Animetetsu" : `${animeInfo.title} | Animetetsu`}
+          {isLoading ? "Animetetsu" : `${animeInfo.animeTitle} | Animetetsu`}
         </title>
       </Helmet>
       {!isLoading ? (
@@ -31,8 +31,8 @@ export default function AnimeDetails() {
           <div id="info" className="flex flex-col lg:flex-row">
             <img
               className="rounded-md w-auto md:h-96 mb-6 hidden md:block lg:mb-0"
-              src={animeInfo.image}
-              alt={animeInfo.title}
+              src={animeInfo.animeImg}
+              alt={animeInfo.animeTitle}
               loading="lazy"
               width={300}
               height={600}
@@ -40,17 +40,17 @@ export default function AnimeDetails() {
             />
             <div className="ml-4">
               <h2 className="text-2xl sm:text-4xl font-bold mb-0 sm:mb-1">
-                {animeInfo.title}
+                {animeInfo.animeTitle}
               </h2>
               <span className="opacity-50">{animeInfo.type}</span>
               <p
                 className={`opacity-50 my-3 ${
-                  animeInfo.description.length > 100
+                  animeInfo.synopsis.length > 100
                     ? "text-xs sm:text-sm"
                     : "text-sm sm:text-base"
                 }`}
               >
-                {animeInfo.description}
+                {animeInfo.synopsis}
               </p>
               <p className="text-sm sm:text-base">
                 Genre:{" "}
@@ -72,12 +72,12 @@ export default function AnimeDetails() {
               </p>
               <p className="my-1 text-sm sm:text-base">
                 Released:{" "}
-                <span className="opacity-50">{animeInfo.releaseDate}</span>
+                <span className="opacity-50">{animeInfo.releasedDate}</span>
               </p>
-              {animeInfo.otherName === "" || (
+              {animeInfo.otherNames === "" || (
                 <p className="text-sm sm:text-base">
                   Other Names:{" "}
-                  <span className="opacity-50">{animeInfo.otherName}</span>
+                  <span className="opacity-50">{animeInfo.otherNames}</span>
                 </p>
               )}
             </div>
@@ -86,7 +86,7 @@ export default function AnimeDetails() {
           animeInfo.type === "Special" ? (
             <div className="my-8">
               <Link
-                to={`/watch/${animeInfo.episodes[0].id.replace(
+                to={`/watch/${animeInfo.episodes[0].animeId.replace(
                   "episode",
                   "ep"
                 )}`}
@@ -99,18 +99,24 @@ export default function AnimeDetails() {
             <div
               className={`mt-8 mb-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4`}
             >
-              {[...animeInfo.episodes].reverse().map(
-                (e: Episode) =>
-                  e.number === "0" || (
-                    <Link
-                      key={e.id}
-                      className="link-btn"
-                      to={`/watch/${e.id.replace("episode", "ep")}`}
-                    >
-                      {e.number}
-                    </Link>
-                  )
-              )}
+              {[...animeInfo.episodesList]
+                .sort(
+                  (a: Episode, b: Episode) =>
+                    Number.parseInt(b.episodeNum) -
+                    Number.parseInt(a.episodeNum)
+                )
+                .map(
+                  (e: Episode) =>
+                    e.episodeNum === "0" || (
+                      <Link
+                        key={e.episodeId}
+                        className="link-btn"
+                        to={`/watch/${e.episodeId.replace("episode", "ep")}`}
+                      >
+                        {e.episodeNum}
+                      </Link>
+                    )
+                )}
             </div>
           )}
         </>

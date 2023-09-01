@@ -1,29 +1,29 @@
 export type Anime = {
-  id: string;
-  title: string;
-  image: string;
+  animeId: string;
+  animeTitle: string;
+  animeImg: string;
   episodeId: string;
-  episodeNumber: string;
-  releaseDate: string;
+  episodeNum: string;
+  releasedDate: string;
 };
 
 export type Episode = {
-  id: string;
-  number: string;
+  episodeId: string;
+  episodeNum: string;
 };
 
 export type AnimeInfo = {
-  id: string;
-  title: string;
+  animeId: string;
+  animeTitle: string;
   type: string;
-  image: string;
+  animeImg: string;
   status: string;
-  releaseDate: string;
+  releasedDate: string;
   genres: string[];
   totalEpisodes: string;
-  otherName: string;
-  description: string;
-  episodes: Episode[];
+  otherNames: string;
+  synopsis: string;
+  episodesList: Episode[];
 };
 
 export type EpisodeSrc = {

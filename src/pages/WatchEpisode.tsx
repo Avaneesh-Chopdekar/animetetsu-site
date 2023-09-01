@@ -1,11 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import VideoPlayer from "../components/VideoPlayer";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getAnimeInfo,
-  getEpisodeData,
-  // getEpisodeDataBk,
-} from "../utils/api";
+import { getAnimeInfoBk, getEpisodeDataBk } from "../utils/api";
 import type { Episode } from "../utils/types";
 import { Helmet } from "react-helmet-async";
 
@@ -29,13 +25,8 @@ export default function WatchEpisode() {
     isError: isEpisodeError,
   } = useQuery({
     queryKey: ["episode", epId],
-    queryFn: () => getEpisodeData(epId!!.replace("ep", "episode")),
+    queryFn: () => getEpisodeDataBk(epId!!.replace("ep", "episode")),
   });
-
-  // const { data: bk_epUrl, isLoading: isEpisodeLoadingBk } = useQuery({
-  //   queryKey: ["backup episode", epId],
-  //   queryFn: () => getEpisodeDataBk(epId!!.replace("ep", "episode")),
-  // });
 
   const {
     data: animeInfo,
@@ -43,7 +34,7 @@ export default function WatchEpisode() {
     isError: isAnimeError,
   } = useQuery({
     queryKey: ["anime-details", newAnimeId],
-    queryFn: () => getAnimeInfo(newAnimeId),
+    queryFn: () => getAnimeInfoBk(newAnimeId),
   });
 
   let ifNotLastEpisode = false;
@@ -58,7 +49,7 @@ export default function WatchEpisode() {
         <title>
           {isAnimeLoading || isAnimeError
             ? "Animetetsu"
-            : `${animeInfo.title} Episode ${episodeNum} | Animetetsu`}
+            : `${animeInfo.animeTitle} Episode ${episodeNum} | Animetetsu`}
         </title>
       </Helmet>
       <h2 className="text-sm xs:text-base sm:text-lg md:text-xl text-center">
@@ -69,7 +60,7 @@ export default function WatchEpisode() {
               className="font-bold hover:underline focus:underline"
               to={`/${newAnimeId}`}
             >
-              {animeInfo.title}
+              {animeInfo.animeTitle}
             </Link>{" "}
             {animeInfo.totalEpisodes !== "1" && `Episode ${episodeNum}`}
           </span>
@@ -86,8 +77,8 @@ export default function WatchEpisode() {
         <div className="my-4 aspect-video h-[180px] sm:h-[225px] md:h-[340px]">
           {isEpisodeLoading || isEpisodeError || (
             <div key={epId}>
-              <VideoPlayer src={epUrl.sources[epUrl.sources.length - 2].url} />
-              {/* <VideoPlayer key={epId} src={bk_epUrl.sources[0].file} /> */}
+              {/* <VideoPlayer src={epUrl.sources[epUrl.sources.length - 2].url} /> */}
+              <VideoPlayer key={epId} src={epUrl.sources[0].file} />
             </div>
           )}
         </div>
@@ -118,18 +109,23 @@ export default function WatchEpisode() {
           <div
             className={`mt-8 mb-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4`}
           >
-            {[...animeInfo.episodes].reverse().map(
-              (e: Episode) =>
-                e.number === "0" || (
-                  <Link
-                    key={e.id}
-                    className="link-btn"
-                    to={`/watch/${e.id.replace("episode", "ep")}`}
-                  >
-                    {e.number}
-                  </Link>
-                )
-            )}
+            {[...animeInfo.episodesList]
+              .sort(
+                (a: Episode, b: Episode) =>
+                  Number.parseInt(b.episodeNum) - Number.parseInt(a.episodeNum)
+              )
+              .map(
+                (e: Episode) =>
+                  e.episodeNum === "0" || (
+                    <Link
+                      key={e.episodeId}
+                      className="link-btn"
+                      to={`/watch/${e.episodeId.replace("episode", "ep")}`}
+                    >
+                      {e.episodeNum}
+                    </Link>
+                  )
+              )}
           </div>
         ))}
     </div>
