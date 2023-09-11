@@ -82,11 +82,10 @@ export default function AnimeDetails() {
               )}
             </div>
           </div>
-          {(animeInfo.totalEpisodes !== "0" && animeInfo.type === "Movie") ||
-          animeInfo.type === "Special" ? (
+          {animeInfo.totalEpisodes !== "0" && animeInfo.type === "Movie" ? (
             <div className="my-8">
               <Link
-                to={`/watch/${animeInfo.episodes[0].animeId.replace(
+                to={`/watch/${animeInfo.episodesList[0].animeId.replace(
                   "episode",
                   "ep"
                 )}`}
