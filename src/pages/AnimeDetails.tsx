@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import PacmanLoading from "../components/PacmanLoading";
-import type { Episode } from "../utils/types";
+import type { EpisodeBk } from "../utils/types";
 import { getAnimeInfoBk } from "../utils/api";
 
 export default function AnimeDetails() {
@@ -100,18 +100,19 @@ export default function AnimeDetails() {
             >
               {[...animeInfo.episodesList]
                 .sort(
-                  (a: Episode, b: Episode) =>
-                    Number.parseInt(b.number) - Number.parseInt(a.number)
+                  (a: EpisodeBk, b: EpisodeBk) =>
+                    Number.parseInt(b.episodeNum) -
+                    Number.parseInt(a.episodeNum)
                 )
                 .map(
-                  (e: Episode) =>
-                    e.number === "0" || (
+                  (e: EpisodeBk) =>
+                    e.episodeNum === "0" || (
                       <Link
-                        key={e.id}
+                        key={e.episodeId}
                         className="link-btn"
-                        to={`/watch/${e.id.replace("episode", "ep")}`}
+                        to={`/watch/${e.episodeId.replace("episode", "ep")}`}
                       >
-                        {e.number}
+                        {e.episodeNum}
                       </Link>
                     )
                 )}
