@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
-import type { Anime } from "../utils/types";
+import type { AnimeBk } from "../utils/types";
 import { getRecentsBk } from "../utils/api";
 import GridLoading from "../components/GridLoading";
 
@@ -20,7 +20,7 @@ export default function Recents() {
       </h1>
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
         {!isLoading ? (
-          data.map((anime: Anime) => (
+          data.map((anime: AnimeBk) => (
             <li
               key={anime.animeId}
               className="mb-2 cursor-pointer"
