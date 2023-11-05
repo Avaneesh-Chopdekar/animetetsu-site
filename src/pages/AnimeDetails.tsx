@@ -101,18 +101,17 @@ export default function AnimeDetails() {
               {[...animeInfo.episodesList]
                 .sort(
                   (a: Episode, b: Episode) =>
-                    Number.parseInt(b.episodeNum) -
-                    Number.parseInt(a.episodeNum)
+                    Number.parseInt(b.number) - Number.parseInt(a.number)
                 )
                 .map(
                   (e: Episode) =>
-                    e.episodeNum === "0" || (
+                    e.number === "0" || (
                       <Link
-                        key={e.episodeId}
+                        key={e.id}
                         className="link-btn"
-                        to={`/watch/${e.episodeId.replace("episode", "ep")}`}
+                        to={`/watch/${e.id.replace("episode", "ep")}`}
                       >
-                        {e.episodeNum}
+                        {e.number}
                       </Link>
                     )
                 )}
