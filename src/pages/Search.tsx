@@ -2,7 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import GridLoading from "../components/GridLoading";
 import type { Anime } from "../utils/types";
-import { getSearchBk } from "../utils/api";
+import { getSearch } from "../utils/api";
 
 export default function Search() {
   const [searchParams] = useSearchParams();
@@ -10,7 +10,7 @@ export default function Search() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["search", q],
-    queryFn: () => getSearchBk(q!!),
+    queryFn: () => getSearch(q!!),
   });
 
   return (
@@ -22,14 +22,14 @@ export default function Search() {
         {!isLoading || data ? (
           data.map((anime: Anime) => (
             <li
-              key={anime.animeId}
+              key={anime.id}
               className="mb-2 cursor-pointer"
-              title={anime.animeTitle}
+              title={anime.title}
             >
-              <Link to={`/${anime.animeId}`}>
+              <Link to={`/${anime.id}`}>
                 <img
-                  src={anime.animeImg}
-                  alt={anime.animeTitle}
+                  src={anime.image}
+                  alt={anime.title}
                   width={250}
                   height={450}
                   loading="lazy"
@@ -37,11 +37,11 @@ export default function Search() {
                   className="mx-auto mb-2 rounded-md w-40 h-64 lg:w-64 lg:h-96"
                 />
                 <div className="text-center text-xs md:text-sm">
-                  {anime.animeId === "oshi-no-ko"
+                  {anime.id === "oshi-no-ko"
                     ? '"Oshi no ko"'
-                    : anime.animeId === "oshi-no-ko-dub"
+                    : anime.id === "oshi-no-ko-dub"
                     ? '"Oshi no ko (Dub)"'
-                    : anime.animeTitle}
+                    : anime.title}
                 </div>
               </Link>
             </li>

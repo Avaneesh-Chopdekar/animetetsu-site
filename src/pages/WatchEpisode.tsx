@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import VideoPlayer from "../components/VideoPlayer";
 import { useQuery } from "@tanstack/react-query";
 import { getAnimeInfoBk, getEpisodeDataBk } from "../utils/api";
-import type { Episode } from "../utils/types";
+import type { EpisodeBk } from "../utils/types";
 import { Helmet } from "react-helmet-async";
 
 export default function WatchEpisode() {
@@ -111,11 +111,11 @@ export default function WatchEpisode() {
           >
             {[...animeInfo.episodesList]
               .sort(
-                (a: Episode, b: Episode) =>
+                (a: EpisodeBk, b: EpisodeBk) =>
                   Number.parseInt(b.episodeNum) - Number.parseInt(a.episodeNum)
               )
               .map(
-                (e: Episode) =>
+                (e: EpisodeBk) =>
                   e.episodeNum === "0" || (
                     <Link
                       key={e.episodeId}

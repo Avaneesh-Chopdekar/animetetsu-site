@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getPopularBk } from "../utils/api";
+import { getPopular } from "../utils/api";
 import type { Anime } from "../utils/types";
 import GridLoading from "../components/GridLoading";
 
 export default function Popular() {
   const { data, isLoading } = useQuery({
     queryKey: ["popular"],
-    queryFn: () => getPopularBk(),
+    queryFn: () => getPopular(),
   });
   return (
     <>
@@ -22,14 +22,14 @@ export default function Popular() {
         {!isLoading ? (
           data.map((anime: Anime) => (
             <li
-              key={anime.animeId}
+              key={anime.id}
               className="mb-2 cursor-pointer"
-              title={anime.animeTitle}
+              title={anime.title}
             >
-              <Link to={`/${anime.animeId}`}>
+              <Link to={`/${anime.id}`}>
                 <img
-                  src={anime.animeImg}
-                  alt={anime.animeTitle}
+                  src={anime.image}
+                  alt={anime.title}
                   width={250}
                   height={450}
                   loading="lazy"
@@ -37,11 +37,11 @@ export default function Popular() {
                   className="mx-auto mb-2 rounded-md w-40 h-64 lg:w-64 lg:h-96"
                 />
                 <div className="text-center text-xs md:text-sm">
-                  {anime.animeId === "oshi-no-ko"
+                  {anime.id === "oshi-no-ko"
                     ? '"Oshi no ko"'
-                    : anime.animeId === "oshi-no-ko-dub"
+                    : anime.id === "oshi-no-ko-dub"
                     ? '"Oshi no ko (Dub)"'
-                    : anime.animeTitle}
+                    : anime.title}
                 </div>
               </Link>
             </li>
